@@ -1,0 +1,84 @@
+<template name="App_body">
+    <div class="container">
+        <header>
+            <h1>SPARS</h1>
+        </header>
+
+        {{#if currentUser}}
+            <div class="tab">
+                <button class="tablinks" onclick="FlowRouter.go('/profile', {})">Update Profile</button>
+                <button class="tablinks" onclick="FlowRouter.go('/', {})">View Parking</button>
+                <button class="tablinks" id="logout">Log Out</button>
+            </div>
+            {{> Template.dynamic template=content}}
+        {{/if}}
+
+        {{#if noUser}}
+            <p>Please sign up or log in to view parkings.</p>
+            {{> atForm}}
+        {{/if}}
+    </div>
+</template>
+
+<template name="home">
+    <input id="search" type="text" name="search" placeholder="Search...">
+    <ul>
+        {{#each grids}}
+            <li><a href="{{pathFor 'Book' _id=_id}}" title="{{name}}">{{name}} - {{@index}}</a></li>
+        {{/each}}
+    </ul>
+</template>
+
+<template name="canvas">
+    <canvas id="canvas"></canvas>
+</template>
+
+<template name="parking">
+    {{#if Template.subscriptionsReady}}
+        {{> canvas}}
+    {{else}}
+        Loading...
+    {{/if}}
+</template>
+
+<template name="booking">
+    Select the date on which you'd like to book the parking:
+    <select id="datemenu"></select>
+    <br>
+    Select the time at which the booking starts:
+    <select id="starting_hour"></select> : <select id="starting_minute"></select>
+    <br>
+    Select the duration of the booking:
+    <select id="duration_hour"></select> : <select id="duration_minute"></select>
+    <br>
+    <button id="confirm_booking">Confirm Booking</button>
+</template>
+
+<template name="out">
+    <button id="logout">Sign out</button>
+</template>
+
+<template name="profile">
+    <p>Enter password first: </p>
+    <input id="password-first" type="password" name="password">
+    <button id="check-password">Confirm</button>
+
+    <div id="profile-form" hidden>
+        <p>Your email address: {{email}}</p>
+        <p>Your phone number: {{phone}}</p>
+        <p>Your number plate: {{plate}}</p>
+    </div>
+</template>
+
+<template name="book">
+    <p class="padded">{{available}} parkings available right now.</p>
+    <p class="padded">Do you want to book?</p>
+    <div class="buttons">
+        <button id="book-no">No</button>
+        <button id="book-yes">Yes</button>
+    </div>
+    <p id="booking-date" class="padded" hidden>What date should the booking start? <select id="datemenu"></select></p>
+    <p id="booking-start" class="padded" hidden>What time should the booking start? <select id="starting_hour"></select> : <select id="starting_minute"></select></p>
+    <p id="booking-end" class="padded" hidden>What should be the duration of the booking? <select id="duration_hour"></select> : <select id="duration_minute"></select></p>
+    <button id="confirm-booking" class="padded" hidden>Confirm Booking</button>
+</template>
